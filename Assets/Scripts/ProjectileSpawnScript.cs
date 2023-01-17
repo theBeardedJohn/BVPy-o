@@ -6,6 +6,8 @@ public class ProjectileSpawnScript : MonoBehaviour
 {
     public Transform firePoint;
     public GameObject bullet;
+    public Rigidbody bvpRb;
+
 
 
     void Update()
@@ -15,7 +17,7 @@ public class ProjectileSpawnScript : MonoBehaviour
         {
 
             Shoot();
-        
+            KickBack();
         
         }
 
@@ -30,7 +32,12 @@ public class ProjectileSpawnScript : MonoBehaviour
 
     }
 
+    void KickBack()
+    {
 
+        bvpRb.AddRelativeForce(0f, 1000f, 1000f);
+
+    }
 
 
 }
