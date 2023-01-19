@@ -20,12 +20,26 @@ public class BvpMovement: MonoBehaviour
     public float maxSteer = 20f;
     private Rigidbody _rigidbody;
 
+
+    public ParticleSystem exhaustParticleL;
+    public ParticleSystem exhaustParticleR;
+
+    private float basicEmmision;
+    private float basicLifetime;
+    private float basicSpeed;
+
+
+
+
+
     void Start()
     {
 
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.centerOfMass = centerOfMass.localPosition;
-
+        basicEmmision = 10f;
+        basicSpeed = 2.4f;
+        basicLifetime = 1f;
     }
 
     void FixedUpdate()
@@ -36,10 +50,23 @@ public class BvpMovement: MonoBehaviour
         wheelColliderLeftFront.steerAngle = Input.GetAxis("Horizontal") * maxSteer;
         wheelColliderRightFront.steerAngle = Input.GetAxis("Horizontal") * maxSteer;
 
+
+
     }
 
     void Update()
     {
+
+        exhaustParticleL.emissionRate = basicEmmision + (Input.GetAxis("Vertical") * 35f);
+        exhaustParticleR.emissionRate = exhaustParticleL.emissionRate;
+
+        //exhaustParticleL.startLifetime = basicEmmision + (Input.GetAxis("Vertical") * 35f);
+        //exhaustParticleR = exhaustParticleL;
+
+        //exhaustParticleL.emissionRate = basicEmmision + (Input.GetAxis("Vertical") * 35f);
+        //exhaustParticleR = exhaustParticleL;
+        //exhaustParticleL.startLifetime
+
         var pos = Vector3.zero;
         var rot = Quaternion.identity;
 
