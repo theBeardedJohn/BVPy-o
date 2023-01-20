@@ -60,12 +60,12 @@ public class BvpMovement: MonoBehaviour
         exhaustParticleL.emissionRate = basicEmmision + (Input.GetAxis("Vertical") * 35f);
         exhaustParticleR.emissionRate = exhaustParticleL.emissionRate;
 
-        //exhaustParticleL.startLifetime = basicEmmision + (Input.GetAxis("Vertical") * 35f);
-        //exhaustParticleR = exhaustParticleL;
+        exhaustParticleL.startLifetime = basicLifetime + (Input.GetAxis("Vertical") * 2f);
+        exhaustParticleR.startLifetime = exhaustParticleL.startLifetime;
 
-        //exhaustParticleL.emissionRate = basicEmmision + (Input.GetAxis("Vertical") * 35f);
-        //exhaustParticleR = exhaustParticleL;
-        //exhaustParticleL.startLifetime
+        exhaustParticleL.startSpeed = basicSpeed + (Input.GetAxis("Vertical") * 6f);
+        exhaustParticleR.startSpeed = exhaustParticleL.startSpeed;
+        
 
         var pos = Vector3.zero;
         var rot = Quaternion.identity;
