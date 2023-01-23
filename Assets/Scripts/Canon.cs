@@ -7,38 +7,26 @@ public class Canon : MonoBehaviour
     public Transform playerTrans;
     public Transform canonBase;
     public Transform canonBarel;
-    public Transform aimRef;
-    private Vector3 lookatRot;
-
-    private float lookatRotVertical;
-    private float lookatRotHorizontal;
-    private Quaternion aimRefQuat;
 
 
+ 
 
-    void Start()
-    {
-        
-    }
+    [SerializeField] float distance;
 
-   
+
+
+
     void Update()
     {
-        
-        aimRef.transform.LookAt(playerTrans);
-        aimRefQuat= aimRef.rotation;
 
-        lookatRotHorizontal = aimRefQuat.y;
-        lookatRotVertical = aimRefQuat.x;
+        distance = Vector3.Distance(playerTrans.position, canonBase.position);
 
+        canonBase.LookAt(new Vector3(playerTrans.position.x, canonBase.position.y, playerTrans.position.z));
+        canonBarel.LookAt(playerTrans);
 
-
-        canonBase.Rotate()
-        //canonBase.Rotate(lookatRotHorizontal);
+       
 
 
 
-
-        Debug.Log(aimRef.rotation);
     }
 }
