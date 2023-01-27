@@ -57,13 +57,13 @@ public class BvpMovement: MonoBehaviour
     void Update()
     {
 
-        exhaustParticleL.emissionRate = basicEmmision + (Input.GetAxis("Vertical") * 35f);
+        exhaustParticleL.emissionRate = basicEmmision + (Mathf.Abs(Input.GetAxis("Vertical")) * 35f);
         exhaustParticleR.emissionRate = exhaustParticleL.emissionRate;
 
-        exhaustParticleL.startLifetime = basicLifetime + (Input.GetAxis("Vertical") * 2f);
+        exhaustParticleL.startLifetime = basicLifetime + (Mathf.Abs(Input.GetAxis("Vertical")) * 2f);
         exhaustParticleR.startLifetime = exhaustParticleL.startLifetime;
 
-        exhaustParticleL.startSpeed = basicSpeed + (Input.GetAxis("Vertical") * 6f);
+        exhaustParticleL.startSpeed = basicSpeed + (Mathf.Abs(Input.GetAxis("Vertical")) * 6f);
         exhaustParticleR.startSpeed = exhaustParticleL.startSpeed;
         
 
