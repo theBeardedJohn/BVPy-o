@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
-public class BvpMovement: MonoBehaviour
+public class BvpMovement : MonoBehaviour
 {
     public Transform centerOfMass;
 
@@ -19,7 +21,7 @@ public class BvpMovement: MonoBehaviour
 
     public float motorTorque = 130f;
     public float maxSteer = 20f;
-    public float breakForce = 20f;
+    public float breakForce;
 
     private Rigidbody _rigidbody;
 
@@ -27,8 +29,8 @@ public class BvpMovement: MonoBehaviour
     public bool motorBool;
 
     public GameObject bvp;
-   
-    
+
+
     public ParticleSystem exhaustParticleL;
     public ParticleSystem exhaustParticleR;
 
@@ -37,7 +39,11 @@ public class BvpMovement: MonoBehaviour
     private float basicSpeed;
 
 
+    // INPUT SYSTEM
+    public float verticalInput;
+    public float horizontalInput;
 
+    
 
 
     void Start()
@@ -48,12 +54,41 @@ public class BvpMovement: MonoBehaviour
         basicEmmision = 10f;
         basicSpeed = 2.4f;
         basicLifetime = 0.74f;
-        
 
-        
+      
+
 
 
     }
+
+    //private void OnMovement(InputValue moveValue)
+    //{   
+    //    Debug.Log(moveValue.Get<float>());
+
+    //}
+
+    public void InputAssign(InputAction.CallbackContext context)
+    {
+        
+        if (context.performed)
+        {
+            verticalInput = context.ReadValue<float>();
+            Debug.Log(verticalInput);
+
+
+        }
+    
+
+        else if (context.canceled)
+        {
+            verticalInput = context.ReadValue<float>();
+            Debug.Log(verticalInput);
+        }
+    
+        
+       
+    }
+
 
     void Break()
     {
@@ -73,16 +108,12 @@ public class BvpMovement: MonoBehaviour
 
         if (motorBool == true)
         {
-        wheelColliderLeftBack.motorTorque = Input.GetAxis("Vertical") * motorTorque;
-        wheelColliderRightBack.motorTorque = Input.GetAxis("Vertical") * motorTorque;
+        wheelColliderLeftBack.motorTorque = verticalInput * motorTorque;
+        wheelColliderRightBack.motorTorque = verticalInput * motorTorque;
         
         }
        
-        if (motorBool == false) 
-        {
-            Break();
-        
-        }
+       
         
         
         
@@ -106,7 +137,7 @@ public class BvpMovement: MonoBehaviour
 
         if (motorBool == true )
         {
-            breakForce = 0f;
+            
 
             exhaustParticleL.emissionRate = basicEmmision + (Mathf.Abs(Input.GetAxis("Vertical")) * 3f);
             exhaustParticleR.emissionRate = exhaustParticleL.emissionRate;
@@ -138,7 +169,11 @@ public class BvpMovement: MonoBehaviour
             wheelRightBack.position = pos;
             wheelRightBack.rotation = rot * Quaternion.Euler(0, 180, 0);
         }
+        if (motorBool == false)
+        {
+            Break();
 
+        }
 
     }
 
