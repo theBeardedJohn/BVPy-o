@@ -9,8 +9,8 @@ public class BvpHealth : MonoBehaviour
     // Start is called before the first frame update
 
     public GameObject bvpDestro;
-    public bool engine;
-
+    public bool motorBool;
+    public GameObject manager;
 
 
 
@@ -32,8 +32,8 @@ public class BvpHealth : MonoBehaviour
     public float fuelConsMult;
     public float fuelConsIdle;
     
-    private float fuelPercentage;
-    private float fuel;
+    public float fuelPercentage;
+    public float fuel;
     private float fuelCons;
 
 
@@ -41,6 +41,7 @@ public class BvpHealth : MonoBehaviour
     {
         health = maxHealth;
         fuel = maxFuel;
+        
 
     }
 
@@ -75,27 +76,43 @@ public class BvpHealth : MonoBehaviour
     }
 
     private void FuelConsumption() 
-    { 
-        if (Input.GetAxis("Vertical") != 0)
+    {
+       motorBool = manager.GetComponent<BvpEngine>().motorIsRuning; 
+        
+        if (motorBool == true)
         {
-            fuelCons = Mathf.Abs(Input.GetAxis("Vertical")) * fuelConsMult;
-            
 
+            if (Input.GetAxis("Vertical") != 0 && fuel > 0f)
+            {
+                fuelCons = Mathf.Abs(Input.GetAxis("Vertical")) * fuelConsMult;
+
+
+            }
+
+            else if (fuel > 0f)
+            {
+                fuelCons = fuelConsIdle * fuelConsMult;
+
+
+            }
+
+
+            if (fuel > 0f)
+            {
+                fuel -= fuelCons;
+
+
+
+            }
+            else
+                fuel = 0f;
+
+                
+                fuelPercentage = fuel / (maxFuel / 100f);
+
+            fuelBarUi.fillAmount = fuelPercentage / 100f;
+            fuelUi.text = Mathf.RoundToInt(fuelPercentage).ToString() + "%";
         }
-
-        else
-        { 
-        fuelCons = fuelConsIdle * fuelConsMult;
-
-
-        }
-
-        fuel -= fuelCons;
-        fuelPercentage = fuel / (maxFuel / 100f);
-
-        fuelBarUi.fillAmount = fuelPercentage / 100f;
-        fuelUi.text = Mathf.RoundToInt(fuelPercentage).ToString() + "%";
-
 
 
 
@@ -104,7 +121,7 @@ public class BvpHealth : MonoBehaviour
     private void Update()
     {
         FuelConsumption();
-
+        
 
 
 

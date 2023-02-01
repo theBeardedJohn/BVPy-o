@@ -19,7 +19,7 @@ public class Canon : MonoBehaviour
     void Update()
     {
 
-        distance = Vector3.Distance(playerTrans.position, canonBase.position);
+        //distance = Vector3.Distance(playerTrans.position, canonBase.position);
 
         canonBase.LookAt(new Vector3(playerTrans.position.x, canonBase.position.y, playerTrans.position.z));
         canonBarel.LookAt(playerTrans);
