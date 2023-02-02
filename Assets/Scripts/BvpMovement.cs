@@ -56,7 +56,8 @@ public class BvpMovement : MonoBehaviour
         basicSpeed = 2.4f;
         basicLifetime = 0.74f;
         breakForce= 0;
-      
+        wheelColliderLeftBack.brakeTorque = breakForce;
+        wheelColliderRightBack.brakeTorque = breakForce;
 
 
 
@@ -112,7 +113,8 @@ public class BvpMovement : MonoBehaviour
         wheelColliderRightBack.motorTorque = verticalInput * motorTorque;
             runingAudio.pitch = 1f + Mathf.Abs(verticalInput/8f);
             breakForce = 0f;
-
+            wheelColliderLeftBack.brakeTorque = breakForce;
+            wheelColliderRightBack.brakeTorque = breakForce;
         }
 
        
@@ -134,7 +136,7 @@ public class BvpMovement : MonoBehaviour
     void Update()
     {
         motorBool = manager.GetComponent<BvpEngine>().motorIsRuning;
-        
+        handBrake = manager.GetComponent<BvpEngine>().handBrake;
 
         if (motorBool == true )
         {
@@ -170,7 +172,7 @@ public class BvpMovement : MonoBehaviour
             wheelRightBack.position = pos;
             wheelRightBack.rotation = rot * Quaternion.Euler(0, 180, 0);
         }
-        if (motorBool == false)
+        else if (motorBool == false)
         {
             Break();
 
