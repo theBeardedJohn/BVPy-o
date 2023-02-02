@@ -27,6 +27,7 @@ public class BvpMovement : MonoBehaviour
 
     public GameObject manager;
     public bool motorBool;
+    public bool handBrake;
 
     public GameObject bvp;
 
@@ -43,7 +44,7 @@ public class BvpMovement : MonoBehaviour
     public float verticalInput;
     public float horizontalInput;
 
-    
+    public AudioSource runingAudio;
 
 
     void Start()
@@ -54,7 +55,7 @@ public class BvpMovement : MonoBehaviour
         basicEmmision = 10f;
         basicSpeed = 2.4f;
         basicLifetime = 0.74f;
-
+        breakForce= 0;
       
 
 
@@ -92,11 +93,10 @@ public class BvpMovement : MonoBehaviour
 
     void Break()
     {
+        breakForce= 40;
         wheelColliderLeftBack.brakeTorque = breakForce;
         wheelColliderRightBack.brakeTorque = breakForce;
-
-
-
+        runingAudio.pitch = 1;
     }
 
 
@@ -104,19 +104,20 @@ public class BvpMovement : MonoBehaviour
     void FixedUpdate()
     {
         motorBool = manager.GetComponent<BvpEngine>().motorIsRuning;
-        
+        handBrake = manager.GetComponent<BvpEngine>().handBrake;
 
         if (motorBool == true)
         {
         wheelColliderLeftBack.motorTorque = verticalInput * motorTorque;
         wheelColliderRightBack.motorTorque = verticalInput * motorTorque;
-        
+            runingAudio.pitch = 1f + Mathf.Abs(verticalInput/8f);
+            breakForce = 0f;
+
         }
+
        
+
        
-        
-        
-        
         
         
         
@@ -174,6 +175,15 @@ public class BvpMovement : MonoBehaviour
             Break();
 
         }
+
+        if (Input.GetKey(KeyCode.C) || handBrake == true)
+        {
+            Break();
+
+
+        }
+
+
 
     }
 

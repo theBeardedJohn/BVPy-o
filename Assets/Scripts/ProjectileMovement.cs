@@ -9,6 +9,8 @@ public class ProjectileMovement : MonoBehaviour
     public Rigidbody rb;
     Vector3 bvpMovement;
 
+   
+
     void Start()
     {
        // bvpMovement = Movement.velocityStat;

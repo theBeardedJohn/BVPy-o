@@ -31,23 +31,50 @@ public class BvpEngine : MonoBehaviour
 
    
     public bool motorIsRuning;
-
+    public bool handBrake;
 
     public ParticleSystem startParticlesL;
     public ParticleSystem startParticlesR;
 
     public Toggle engineButtonTog;
 
+    //AUDIO
+    public AudioSource startAudio;
+    public AudioSource runingAudio;
+
+
+
     void Start()
     {
         engineLed.color = engineLedColorOff;
         motorShake = false;
         motorIsRuning = false;
+        handBrake= false;
 
         startParticlesL.Stop();
         startParticlesR.Stop();
 
     }
+
+
+    public void AudioStart()
+    { 
+            startAudio.Play();
+
+    }
+
+    public void AudioRuning() 
+    { 
+    
+    runingAudio.Play();
+    
+    }
+
+
+
+
+
+
 
 
     public void MotorSwitch(bool toggleEngine)
@@ -60,6 +87,7 @@ public class BvpEngine : MonoBehaviour
             Debug.Log("Startovací sekvence zapoèala - brm brm");
             motorShake = true;
             motorIsRuning = false;
+            AudioStart();
             
 
             // PARTICLES ON START
@@ -95,9 +123,23 @@ public class BvpEngine : MonoBehaviour
         // PARTICLES ON STOP
         startParticlesL.Stop();
         startParticlesR.Stop();
+
+        // AUDIO STOP
+        runingAudio.Stop();
+
     }
 
+    private void HandBrakeSwitch()
+    { 
+    if (Input.GetKeyDown(KeyCode.O)) 
+        {
 
+            handBrake = !handBrake;
+
+
+        }
+    
+    }
 
     private void RuningEngine()
     {
@@ -108,6 +150,8 @@ public class BvpEngine : MonoBehaviour
             Debug.Log("Jede stabilne");
             motorShake = false;
             motorIsRuning = true;
+            startAudio.Stop();
+            AudioRuning();
         }
 
 
@@ -138,8 +182,9 @@ public class BvpEngine : MonoBehaviour
 
     private void Update()
     {
+        HandBrakeSwitch();
         fuel = bvpTrans.GetComponent<BvpHealth>().fuel;
-        if (fuel < 0f)
+        if (fuel <= 0f)
         {
             StopEngine();
         }
