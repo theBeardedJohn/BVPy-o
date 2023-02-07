@@ -35,7 +35,7 @@ public class ProjectileSpawnScript : MonoBehaviour
     void KickBack()
     {
 
-        bvpRb.AddRelativeForce(0f, 100000f, -300000f);
+        bvpRb.AddRelativeForce(0f, 10000f, -30000f);
 
     }
 

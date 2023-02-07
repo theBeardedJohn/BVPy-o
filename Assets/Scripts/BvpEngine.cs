@@ -172,7 +172,7 @@ public class BvpEngine : MonoBehaviour
         if (motorShake == true) 
         {
 
-            bvpRb.AddRelativeForce(new Vector3(0f, Random.Range(-10000.0f, 10000.0f), Random.Range(-10000.0f, 10000.0f)));
+            bvpRb.AddRelativeForce(new Vector3(0f, Random.Range(-500.0f, 500.0f), Random.Range(-500.0f, 500.0f)));
             
         }
 

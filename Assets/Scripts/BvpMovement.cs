@@ -19,7 +19,7 @@ public class BvpMovement : MonoBehaviour
     public Transform wheelLeftBack;
     public Transform wheelRightBack;
 
-    public float motorTorque = 130f;
+    public float motorTorque = 300f;
     public float maxSteer = 20f;
     public float breakForce;
 
@@ -47,6 +47,22 @@ public class BvpMovement : MonoBehaviour
     public AudioSource runingAudio;
 
 
+    // TEMP
+    [SerializeField] float brzda1;
+    [SerializeField] float brzda2;
+    [SerializeField] float brzda3;
+    [SerializeField] float brzda4;
+
+    [SerializeField] float plyn1;
+    [SerializeField] float plyn2;
+    [SerializeField] float plyn3;
+    [SerializeField] float plyn4;
+
+
+
+
+
+
     void Start()
     {
 
@@ -63,11 +79,7 @@ public class BvpMovement : MonoBehaviour
 
     }
 
-    //private void OnMovement(InputValue moveValue)
-    //{   
-    //    Debug.Log(moveValue.Get<float>());
-
-    //}
+  
 
     public void InputAssign(InputAction.CallbackContext context)
     {
@@ -75,7 +87,7 @@ public class BvpMovement : MonoBehaviour
         if (context.performed)
         {
             verticalInput = context.ReadValue<float>();
-            Debug.Log(verticalInput);
+            
 
 
         }
@@ -84,7 +96,7 @@ public class BvpMovement : MonoBehaviour
         else if (context.canceled)
         {
             verticalInput = context.ReadValue<float>();
-            Debug.Log(verticalInput);
+            
         }
     
         
@@ -94,10 +106,14 @@ public class BvpMovement : MonoBehaviour
 
     void Break()
     {
-        breakForce= 40;
+        breakForce= 300;
         wheelColliderLeftBack.brakeTorque = breakForce;
         wheelColliderRightBack.brakeTorque = breakForce;
+        wheelColliderLeftFront.brakeTorque = breakForce;
+        wheelColliderRightFront.brakeTorque = breakForce;
+
         runingAudio.pitch = 1;
+        
     }
 
 
@@ -107,20 +123,35 @@ public class BvpMovement : MonoBehaviour
         motorBool = manager.GetComponent<BvpEngine>().motorIsRuning;
         handBrake = manager.GetComponent<BvpEngine>().handBrake;
 
-        if (motorBool == true)
+        if (motorBool == true && verticalInput != 0f && handBrake == false)
         {
-        wheelColliderLeftBack.motorTorque = verticalInput * motorTorque;
-        wheelColliderRightBack.motorTorque = verticalInput * motorTorque;
-            runingAudio.pitch = 1f + Mathf.Abs(verticalInput/8f);
-            breakForce = 0f;
-            wheelColliderLeftBack.brakeTorque = breakForce;
-            wheelColliderRightBack.brakeTorque = breakForce;
+       
+            
+            wheelColliderLeftBack.brakeTorque = 0f;
+            wheelColliderRightBack.brakeTorque = 0f;
+            wheelColliderLeftFront.brakeTorque = 0f;
+            wheelColliderRightFront.brakeTorque = 0f;
+
+
+
+            wheelColliderLeftBack.motorTorque = verticalInput * motorTorque;
+            wheelColliderRightBack.motorTorque = verticalInput * motorTorque;
+            runingAudio.pitch = 1f + Mathf.Abs(verticalInput / 8f);
+
         }
 
-       
+        else if (motorBool == false)
+        {
+            Break();
 
-       
-        
+        }
+
+        if (Input.GetKey(KeyCode.C) || handBrake == true)
+        {
+            Break();
+
+
+        }
         
         
         wheelColliderLeftFront.steerAngle = Input.GetAxis("Horizontal") * maxSteer;
@@ -142,16 +173,16 @@ public class BvpMovement : MonoBehaviour
         {
             
 
-            exhaustParticleL.emissionRate = basicEmmision + (Mathf.Abs(Input.GetAxis("Vertical")) * 3f);
+            exhaustParticleL.emissionRate = basicEmmision + (Mathf.Abs(verticalInput) * 3f);
             exhaustParticleR.emissionRate = exhaustParticleL.emissionRate;
 
-            exhaustParticleL.startLifetime = basicLifetime + (Mathf.Abs(Input.GetAxis("Vertical")) * 1f);
+            exhaustParticleL.startLifetime = basicLifetime + (Mathf.Abs(verticalInput) * 1f);
             exhaustParticleR.startLifetime = exhaustParticleL.startLifetime;
 
-            exhaustParticleL.startSpeed = basicSpeed + (Mathf.Abs(Input.GetAxis("Vertical")) * 1.2f);
+            exhaustParticleL.startSpeed = basicSpeed + (Mathf.Abs(verticalInput) * 1.2f);
             exhaustParticleR.startSpeed = exhaustParticleL.startSpeed;
 
-            
+         }   
 
             var pos = Vector3.zero;
             var rot = Quaternion.identity;
@@ -171,19 +202,23 @@ public class BvpMovement : MonoBehaviour
             wheelColliderRightBack.GetWorldPose(out pos, out rot);
             wheelRightBack.position = pos;
             wheelRightBack.rotation = rot * Quaternion.Euler(0, 180, 0);
-        }
-        else if (motorBool == false)
-        {
-            Break();
+        
+        
 
-        }
+       
 
-        if (Input.GetKey(KeyCode.C) || handBrake == true)
-        {
-            Break();
+       brzda1 = wheelColliderLeftBack.brakeTorque;
+       brzda2 = wheelColliderRightBack.brakeTorque;
+       brzda3 = wheelColliderLeftBack.brakeTorque;
+       brzda4 = wheelColliderRightBack.brakeTorque;
+
+       plyn1 = wheelColliderLeftBack.motorTorque;
+       plyn2 = wheelColliderRightBack.motorTorque;
+       plyn3 = wheelColliderLeftBack.motorTorque;
+       plyn4 = wheelColliderRightBack.motorTorque;
 
 
-        }
+
 
 
 

@@ -6,14 +6,13 @@ using UnityEngine.UI;
 
 public class BvpHealth : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Script pro HEALT a PALIVO BVP
 
     public GameObject bvpDestro;
     public bool motorBool;
     public GameObject manager;
 
-
-
+    public float verticalIn;
 
     // HEALTH SYSTEM
     public Text healthUi;
@@ -23,7 +22,6 @@ public class BvpHealth : MonoBehaviour
 
     private float healthPercentage;
     private float health;
-
 
     // FUEL SYSTEM
     public Text fuelUi;
@@ -36,23 +34,21 @@ public class BvpHealth : MonoBehaviour
     public float fuel;
     private float fuelCons;
 
-
+    // Nastavení zdraví a paliva na max pøi spuštìní
     private void Start()
     {
         health = maxHealth;
         fuel = maxFuel;
-        
 
     }
 
+    // Odeèet zdraví pøi kolizi s kulkou a podmínka pro znièení
     private void OnCollisionEnter(Collision Collision)
     {
         if (Collision.gameObject.tag == "Bullet" && health > 1)
         {
 
             health -= enemyDmg;
-
-            
 
         }
 
@@ -68,23 +64,24 @@ public class BvpHealth : MonoBehaviour
             Instantiate(bvpDestro, transform.position, transform.rotation);
             Destroy(gameObject);
             
-        
         }
 
 
 
     }
 
+    // Odeèet paliva a podmínka pro motor
     private void FuelConsumption() 
     {
        motorBool = manager.GetComponent<BvpEngine>().motorIsRuning; 
         
         if (motorBool == true)
         {
+            verticalIn = GetComponent<BvpMovement>().verticalInput;
 
-            if (Input.GetAxis("Vertical") != 0 && fuel > 0f)
+            if (verticalIn != 0 && fuel > 0f)
             {
-                fuelCons = Mathf.Abs(Input.GetAxis("Vertical")) * fuelConsMult;
+                fuelCons = Mathf.Abs(verticalIn) * fuelConsMult;
 
 
             }
